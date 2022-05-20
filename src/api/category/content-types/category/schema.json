@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categories",
+  "info": {
+    "singularName": "category",
+    "pluralName": "categories",
+    "displayName": "category",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "unique": true,
+      "required": true,
+      "maxLength": 30
+    },
+    "color": {
+      "type": "string",
+      "required": true,
+      "maxLength": 9,
+      "minLength": 4,
+      "regex": "^#(?:[0-9a-fA-F]{3}){1,2}$",
+      "unique": false
+    },
+    "code": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    }
+  }
+}

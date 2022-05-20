@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "posts",
+  "info": {
+    "singularName": "post",
+    "pluralName": "posts",
+    "displayName": "post",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "seo_title": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "url": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "seo_description": {
+      "type": "text",
+      "required": true,
+      "maxLength": 185
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    },
+    "miniature": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "publication_date": {
+      "type": "date",
+      "required": true
+    },
+    "premium": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "admin_users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "admin::user"
+    },
+    "publish": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category.category"
+    }
+  }
+}

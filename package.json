@@ -1,0 +1,32 @@
+{
+  "name": "blog-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "develop:admin": "strapi develop --watch-admin",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/plugin-graphql": "^4.1.11",
+    "@strapi/plugin-i18n": "4.1.9",
+    "@strapi/plugin-users-permissions": "4.1.9",
+    "@strapi/strapi": "4.1.9",
+    "pg": "8.6.0",
+    "strapi-plugin-react-editorjs": "^2.0.1"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "8f21f35c-8730-4550-9158-80caf180598f"
+  },
+  "engines": {
+    "node": ">=12.x.x <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
