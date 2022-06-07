@@ -21,7 +21,7 @@
       "required": true,
       "unique": false
     },
-    "url": {
+    "slug": {
       "type": "uid",
       "targetField": "title",
       "required": true
@@ -62,9 +62,14 @@
       "default": false,
       "required": true
     },
-    "categories": {
+    "tags": {
       "type": "relation",
       "relation": "oneToMany",
+      "target": "api::category.category"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
       "target": "api::category.category"
     }
   }
