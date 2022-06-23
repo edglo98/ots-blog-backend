@@ -46,18 +46,37 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
 
   async sendEmail (ctx) {
     try {
+      const req = ctx.request;
+      const {
+        business_type,
+        email,
+        name,
+        need,
+        perfile_type,
+        request,
+        sector_type,
+        phone,
+      } = req.body
       await strapi.plugins['email'].services.email.send({
         to: 'edgarlopezmgs@live.com',
-        from: 'contacto@edgxr.com',
-        replyTo: 'contacto@edgxr.com',
-        subject: 'Use strapi email provider successfully',
-        text: 'Hello world!',
+        from: 'no-reply@edgxr.com',
+        replyTo: 'no-reply@edgxr.com',
+        subject: `${name} from OTS website`,
         html: `
-          <h1>Hello world!</h1>
-          <h1>Hello world!2</h1>
-          <h1>Hello world!3</h1>
-          <h1>Hello world!4</h1>
-          <h1>Hello world!5</h1>
+          <h1>Correo recibido a traves del sitio web de OTS enviado por ${name}</h1>
+          <br>
+          <br>
+          <h2>Necesidad</h2>
+          <p>${need}</p>
+          <h2>Requerimiento</h2>
+          <p>${request}</p>
+          <h2>Información adicional</h2>
+          <p>Perfil: <strong>${perfile_type}</strong></p>
+          <p>Sector: <strong>${sector_type}</strong></p>
+          <p>Giro: <strong>${business_type}</strong></p>
+          <h2>Contacto</h2>
+          <p>Email: <strong>${email}</strong></p>
+          <p>Teléfono: <strong>${phone}</strong></p>
         `,
       });
 
