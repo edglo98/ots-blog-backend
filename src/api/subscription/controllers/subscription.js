@@ -58,9 +58,9 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
         phone,
       } = req.body
       await strapi.plugins['email'].services.email.send({
-        to: 'edgarlopezmgs@live.com',
-        from: 'no-reply@edgxr.com',
-        replyTo: 'no-reply@edgxr.com',
+        to: 'edgarlopezmgs@live.com', // change ots@loopempresarial.com.mx
+        from: 'no-reply@loopempresarial.com.mx',
+        replyTo: 'no-reply@loopempresarial.com.mx',
         subject: `${name} from OTS website`,
         html: `
           <h1>Correo recibido a traves del sitio web de OTS enviado por ${name}</h1>
