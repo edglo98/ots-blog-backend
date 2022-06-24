@@ -3,10 +3,10 @@
 /**
  *  subscription controller
  */
-const strapi_key = process.env.STRAPI_KEY;
+const stripe_key = process.env.STRIPE_KEY;
 const endpointSecret = process.env.ENDPOINT_SECRET;
 const FRONT_DOMAIN = process.env.FRONT_DOMAIN;
-const stripe = require('stripe')(strapi_key);
+const stripe = require('stripe')(stripe_key);
 const unparsed = require('koa-body/unparsed.js'); 
 const { createCoreController } = require('@strapi/strapi').factories;
 
