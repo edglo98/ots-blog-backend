@@ -85,6 +85,7 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
         message: 'Email sent successfully',
       };
     } catch (error) {
+      console.log(error.response.body)
       ctx.status = 500;
     }
   },
