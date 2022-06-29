@@ -116,10 +116,10 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
       
       // create subscription
       ctx.request.body.data = {
-        amount: Number(session.amount_total) / 100,
-        status: session.status,
-        session_id: session.id,
         user: req.body.user_id,
+        session_id: session.id,
+        status: session.status,
+        amount: Number(session.amount_total) / 100,
       }
       
       await super.create(ctx);
@@ -179,14 +179,61 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
 
     // Handle the event
     switch (event.type) {
-      // case 'customer.subscription.trial_will_end': {
-      //   const subscription = event.data.object;
-      //   const status = subscription.status;
-      //   console.log(`Subscription status is ${status}.`);
-      //   // Then define and call a method to handle the subscription trial ending.
-      //   // handleSubscriptionTrialEnding(subscription);
-      //   break;
+      case 'checkout.session.completed': {
+        const session = event.data.object;
+        console.log('checkout.session.completed',event.data)
+        const entries = await strapi.entityService.findMany('api::subscription.subscription', {
+          filters: {
+            session_id: session.id
+          },
+        });
+
+        if (entries.length > 0) {
+        
+          const sub_id = entries[0].id;
+  
+          const data = {
+            status: 'active',
+            customer_id: session.customer,
+          }
+    
+          await strapi.entityService.update('api::subscription.subscription', sub_id, { data });
+        }
+        
+        break;
+      }
+
+      // case 'invoice.paid': {
+
+      //   // Continue to provision the subscription as payments continue to be made.
+      //   // Store the status in your database and check when a user accesses your service.
+      //   // This approach helps you avoid hitting rate limits.
+        
       // }
+      case 'invoice.payment_failed': {
+        const subscription = event.data.object;
+
+        const entries = await strapi.entityService.findMany('api::subscription.subscription', {
+          filters: {
+            customer_id: subscription.customer || '',
+          },
+        });
+
+        if (entries.length > 0) {
+          const sub_id = entries[0].id;
+          const data = {
+            status: 'payment_failed',
+          }
+    
+          await strapi.entityService.update('api::subscription.subscription', sub_id, { data });
+        }
+        // The payment failed or the customer does not have a valid payment method.
+        // The subscription becomes past_due. Notify your customer and send them to the
+        // customer portal to update their payment information.
+        break;
+      }
+
+
       case 'customer.subscription.deleted': {
         const subscription = event.data.object;
         const status = subscription.status;
@@ -198,13 +245,12 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
         });
 
         if (entries.length > 0) {
-        
           const sub_id = entries[0].id;
-  
           const data = {
-            status,
+            status: 'subscription_end',
           }
     
+          console.log(event.type, 'status: ', status)
           await strapi.entityService.update('api::subscription.subscription', sub_id, { data });
         }
 
@@ -213,32 +259,8 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
         // handleSubscriptionDeleted(subscriptionDeleted);
         break;
       }
-      case 'customer.subscription.created': {
-        const subscription = event.data.object;
-        const status = subscription.status;
-        
-        const entries = await strapi.entityService.findMany('api::subscription.subscription', {
-          filters: {
-            customer_id: subscription.customer,
-          },
-        });
 
-        if (entries.length > 0) {
-        
-          const sub_id = entries[0].id;
-  
-          const data = {
-            status,
-          }
-    
-          await strapi.entityService.update('api::subscription.subscription', sub_id, { data });
-        }
 
-        console.log(`Subscription created`);
-        // Then define and call a method to handle the subscription created.
-        // handleSubscriptionCreated(subscription);
-        break;
-      }
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
         const status = subscription.status;
@@ -250,27 +272,22 @@ module.exports = createCoreController('api::subscription.subscription', ({strapi
         });
 
         if (entries.length > 0) {
-        
           const sub_id = entries[0].id;
-  
           const data = {
             status,
           }
+          console.log(event.type, 'status: ', status)
     
           await strapi.entityService.update('api::subscription.subscription', sub_id, { data });
         }
-        
-        console.log(`Subscription updated`);
-        // Then define and call a method to handle the subscription update.
-        // handleSubscriptionUpdated(subscription);
         break;
       }
+
+  
       default:
-        // Unexpected event type
         console.log(`Unhandled event type ${event.type}.`);
     }
-  
-    // Return a 200 response to acknowledge receipt of the event
+    
     ctx.body = { received: true };
   }
 }));
