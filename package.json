@@ -16,7 +16,7 @@
     "@strapi/plugin-users-permissions": "4.1.9",
     "@strapi/provider-email-sendgrid": "^4.2.0",
     "@strapi/strapi": "4.1.9",
-    "pg": "8.6.0",
+    "pg": "^8.6.0",
     "pg-connection-string": "^2.5.0",
     "strapi-plugin-react-editorjs": "^2.0.1",
     "stripe": "^9.8.0"
